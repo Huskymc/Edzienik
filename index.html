@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>System Szkolny – Logowanie</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #eef2f3;
+    margin: 0;
+}
+header {
+    background: #34495e;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 6px;
+}
+.hidden { display: none; }
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+}
+button {
+    background: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background: #2980b9;
+}
+.panel {
+    border-top: 2px solid #ddd;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+.box {
+    background: #ecf0f1;
+    padding: 10px;
+    margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>System Szkolny</h1>
+</header>
+
+<div class="container">
+
+<!-- LOGOWANIE -->
+<div id="loginBox">
+    <h2>Logowanie</h2>
+    <input id="username" placeholder="Imię i nazwisko">
+    <select id="role">
+        <option value="">-- wybierz rolę --</option>
+        <option value="uczen">Uczeń</option>
+        <option value="nauczyciel">Nauczyciel</option>
+        <option value="dyrektor">Dyrektor / Dyrektorka</option>
+    </select>
+    <button onclick="login()">Zaloguj</button>
+</div>
+
+<!-- PANEL UCZNIA -->
+<div id="uczenPanel" class="hidden panel">
+    <h2>Panel ucznia</h2>
+    <p>Witaj, <b id="uczenName"></b></p>
+    <div class="box">
+        <h3>Oceny</h3>
+        <p>Matematyka: 5</p>
+        <p>Polski: 4</p>
+        <p>Angielski: 5</p>
+    </div>
+    <button onclick="logout()">Wyloguj</button>
+</div>
+
+<!-- PANEL NAUCZYCIELA -->
+<div id="nauczycielPanel" class="hidden panel">
+    <h2>Panel nauczyciela</h2>
+    <p>Witaj, <b id="nauczycielName"></b></p>
+    <div class="box">
+        <h3>Twoje klasy</h3>
+        <ul>
+            <li>1A</li>
+            <li>2B</li>
+        </ul>
+    </div>
+    <button onclick="logout()">Wyloguj</button>
+</div>
+
+<!-- PANEL DYREKTORA -->
+<div id="dyrektorPanel" class="hidden panel">
+    <h2>Panel dyrektora</h2>
+    <p>Witaj, <b id="dyrektorName"></b></p>
+    <div class="box">
+        <h3>Statystyki szkoły</h3>
+        <p>Uczniowie: 420</p>
+        <p>Nauczyciele: 38</p>
+        <p>Klasy: 21</p>
+    </div>
+    <button onclick="logout()">Wyloguj</button>
+</div>
+
+</div>
+
+<script>
+function login() {
+    const name = document.getElementById("username").value;
+    const role = document.getElementById("role").value;
+
+    if (!name || !role) {
+        alert("Podaj imię i wybierz rolę");
+        return;
+    }
+
+    localStorage.setItem("user", JSON.stringify({ name, role }));
+
+    document.getElementById("loginBox").classList.add("hidden");
+
+    if (role === "uczen") {
+        document.getElementById("uczenName").innerText = name;
+        document.getElementById("uczenPanel").classList.remove("hidden");
+    }
+    if (role === "nauczyciel") {
+        document.getElementById("nauczycielName").innerText = name;
+        document.getElementById("nauczycielPanel").classList.remove("hidden");
+    }
+    if (role === "dyrektor") {
+        document.getElementById("dyrektorName").innerText = name;
+        document.getElementById("dyrektorPanel").classList.remove("hidden");
+    }
+}
+
+function logout() {
+    localStorage.removeItem("user");
+    location.reload();
+}
+
+// auto-logowanie
+const saved = JSON.parse(localStorage.getItem("user"));
+if (saved) {
+    document.getElementById("username").value = saved.name;
+    document.getElementById("role").value = saved.role;
+    login();
+}
+</script>
+
+</body>
+</html>
