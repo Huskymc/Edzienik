@@ -2,143 +2,189 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<title>System Szkolny – Logowanie</title>
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background: #eef2f3;
-    margin: 0;
-}
-header {
-    background: #34495e;
-    color: white;
-    padding: 15px;
-    text-align: center;
-}
-.container {
-    max-width: 900px;
-    margin: 30px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 6px;
-}
-.hidden { display: none; }
+<title>E-Dziennik – Panel</title>
 
-input, select, button {
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+}
+
+/* LOGIN */
+#login {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login-box {
+    background: white;
+    width: 350px;
+    padding: 30px;
+    border-radius: 6px;
+    box-shadow: 0 0 15px rgba(0,0,0,.15);
+}
+.login-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.login-box input, .login-box select, .login-box button {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
 }
-button {
-    background: #3498db;
+.login-box button {
+    background: #1976d2;
     color: white;
     border: none;
     cursor: pointer;
 }
-button:hover {
-    background: #2980b9;
+.login-box button:hover {
+    background: #125aa3;
 }
-.panel {
-    border-top: 2px solid #ddd;
-    margin-top: 20px;
-    padding-top: 20px;
+
+/* APP */
+#app {
+    display: none;
+    height: 100vh;
 }
-.box {
-    background: #ecf0f1;
-    padding: 10px;
-    margin-top: 10px;
+
+/* SIDEBAR */
+.sidebar {
+    width: 230px;
+    background: #1f2a38;
+    color: white;
+    padding: 20px;
+}
+.sidebar h3 {
+    margin-top: 0;
+    font-size: 18px;
+}
+.sidebar a {
+    display: block;
+    color: #cfd8dc;
+    text-decoration: none;
+    padding: 10px 0;
+}
+.sidebar a:hover {
+    color: white;
+}
+
+/* MAIN */
+.main {
+    flex: 1;
+    padding: 20px;
+}
+.header {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+.flex {
+    display: flex;
+}
+.logout {
+    float: right;
+    cursor: pointer;
+    color: #1976d2;
 }
 </style>
 </head>
+
 <body>
 
-<header>
-<h1>System Szkolny</h1>
-</header>
-
-<div class="container">
-
-<!-- LOGOWANIE -->
-<div id="loginBox">
-    <h2>Logowanie</h2>
-    <input id="username" placeholder="Imię i nazwisko">
-    <select id="role">
-        <option value="">-- wybierz rolę --</option>
-        <option value="uczen">Uczeń</option>
-        <option value="nauczyciel">Nauczyciel</option>
-        <option value="dyrektor">Dyrektor / Dyrektorka</option>
-    </select>
-    <button onclick="login()">Zaloguj</button>
-</div>
-
-<!-- PANEL UCZNIA -->
-<div id="uczenPanel" class="hidden panel">
-    <h2>Panel ucznia</h2>
-    <p>Witaj, <b id="uczenName"></b></p>
-    <div class="box">
-        <h3>Oceny</h3>
-        <p>Matematyka: 5</p>
-        <p>Polski: 4</p>
-        <p>Angielski: 5</p>
+<!-- LOGIN -->
+<div id="login">
+    <div class="login-box">
+        <h2>E-Dziennik</h2>
+        <input id="name" placeholder="Login / Imię i nazwisko">
+        <select id="role">
+            <option value="">Wybierz rolę</option>
+            <option value="uczen">Uczeń</option>
+            <option value="nauczyciel">Nauczyciel</option>
+            <option value="dyrektor">Dyrektor</option>
+        </select>
+        <button onclick="login()">Zaloguj</button>
     </div>
-    <button onclick="logout()">Wyloguj</button>
 </div>
 
-<!-- PANEL NAUCZYCIELA -->
-<div id="nauczycielPanel" class="hidden panel">
-    <h2>Panel nauczyciela</h2>
-    <p>Witaj, <b id="nauczycielName"></b></p>
-    <div class="box">
-        <h3>Twoje klasy</h3>
-        <ul>
-            <li>1A</li>
-            <li>2B</li>
-        </ul>
+<!-- APP -->
+<div id="app" class="flex">
+
+    <div class="sidebar">
+        <h3 id="userRole"></h3>
+        <a href="#">📘 Dziennik</a>
+        <a href="#">📅 Plan lekcji</a>
+        <a href="#">📝 Oceny</a>
+        <a href="#">📨 Wiadomości</a>
+        <a href="#">⚙️ Ustawienia</a>
     </div>
-    <button onclick="logout()">Wyloguj</button>
-</div>
 
-<!-- PANEL DYREKTORA -->
-<div id="dyrektorPanel" class="hidden panel">
-    <h2>Panel dyrektora</h2>
-    <p>Witaj, <b id="dyrektorName"></b></p>
-    <div class="box">
-        <h3>Statystyki szkoły</h3>
-        <p>Uczniowie: 420</p>
-        <p>Nauczyciele: 38</p>
-        <p>Klasy: 21</p>
+    <div class="main">
+        <div class="header">
+            Witaj, <b id="userName"></b>
+            <span class="logout" onclick="logout()">Wyloguj</span>
+        </div>
+
+        <!-- UCZEŃ -->
+        <div id="uczenPanel" class="card" style="display:none">
+            <h3>Twoje oceny</h3>
+            Matematyka: 5<br>
+            Polski: 4<br>
+            Angielski: 5
+        </div>
+
+        <!-- NAUCZYCIEL -->
+        <div id="nauczycielPanel" class="card" style="display:none">
+            <h3>Dziennik lekcyjny</h3>
+            Klasa 1A – Matematyka<br>
+            Klasa 2B – Matematyka
+        </div>
+
+        <!-- DYREKTOR -->
+        <div id="dyrektorPanel" class="card" style="display:none">
+            <h3>Panel zarządzania szkołą</h3>
+            Uczniowie: 412<br>
+            Nauczyciele: 36<br>
+            Klasy: 20
+        </div>
+
     </div>
-    <button onclick="logout()">Wyloguj</button>
-</div>
-
 </div>
 
 <script>
 function login() {
-    const name = document.getElementById("username").value;
-    const role = document.getElementById("role").value;
+    const name = nameInput.value;
+    const role = roleInput.value;
 
     if (!name || !role) {
-        alert("Podaj imię i wybierz rolę");
+        alert("Uzupełnij dane");
         return;
     }
 
-    localStorage.setItem("user", JSON.stringify({ name, role }));
+    localStorage.setItem("user", JSON.stringify({name, role}));
+    showApp(name, role);
+}
 
-    document.getElementById("loginBox").classList.add("hidden");
+function showApp(name, role) {
+    loginDiv.style.display = "none";
+    appDiv.style.display = "flex";
 
-    if (role === "uczen") {
-        document.getElementById("uczenName").innerText = name;
-        document.getElementById("uczenPanel").classList.remove("hidden");
-    }
-    if (role === "nauczyciel") {
-        document.getElementById("nauczycielName").innerText = name;
-        document.getElementById("nauczycielPanel").classList.remove("hidden");
-    }
-    if (role === "dyrektor") {
-        document.getElementById("dyrektorName").innerText = name;
-        document.getElementById("dyrektorPanel").classList.remove("hidden");
-    }
+    userName.innerText = name;
+    userRole.innerText = role.toUpperCase();
+
+    uczenPanel.style.display = role === "uczen" ? "block" : "none";
+    nauczycielPanel.style.display = role === "nauczyciel" ? "block" : "none";
+    dyrektorPanel.style.display = role === "dyrektor" ? "block" : "none";
 }
 
 function logout() {
@@ -146,14 +192,9 @@ function logout() {
     location.reload();
 }
 
-// auto-logowanie
-const saved = JSON.parse(localStorage.getItem("user"));
-if (saved) {
-    document.getElementById("username").value = saved.name;
-    document.getElementById("role").value = saved.role;
-    login();
-}
-</script>
-
-</body>
-</html>
+// SHORTCUTS
+const nameInput = document.getElementById("name");
+const roleInput = document.getElementById("role");
+const loginDiv = document.getElementById("login");
+const appDiv = document.getElementById("app");
+const userName = document.getElementById("userNam
