@@ -5,93 +5,34 @@
 <title>E-Dziennik</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-}
+body { margin:0;font-family:Arial;background:#f4f6f8 }
+.hidden{display:none}
+.flex{display:flex}
 
 /* LOGIN */
-#login {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.login-box {
-    background: #fff;
-    width: 340px;
-    padding: 30px;
-    border-radius: 6px;
-    box-shadow: 0 0 15px rgba(0,0,0,.2);
-}
-.login-box h2 {
-    text-align: center;
-}
-.login-box input,
-.login-box select,
-.login-box button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-}
-.login-box button {
-    background: #1976d2;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-.login-box button:hover {
-    background: #125aa3;
-}
+#login{height:100vh;display:flex;justify-content:center;align-items:center}
+.login{background:#fff;padding:30px;width:340px;border-radius:6px}
+.login input,.login select,.login button{width:100%;padding:10px;margin-top:10px}
+.login button{background:#1976d2;color:#fff;border:0;cursor:pointer}
 
 /* APP */
-#app {
-    display: none;
-    height: 100vh;
-}
+#app{height:100vh}
 
 /* SIDEBAR */
-.sidebar {
-    width: 220px;
-    background: #1f2a38;
-    color: #fff;
-    padding: 20px;
-}
-.sidebar a {
-    display: block;
-    color: #cfd8dc;
-    text-decoration: none;
-    margin: 10px 0;
-}
-.sidebar a:hover {
-    color: #fff;
-}
+.sidebar{width:230px;background:#1f2a38;color:#fff;padding:20px}
+.sidebar a{display:block;color:#cfd8dc;text-decoration:none;margin:12px 0}
+.sidebar a:hover{color:#fff}
 
 /* MAIN */
-.main {
-    flex: 1;
-    padding: 20px;
-}
-.header {
-    background: #fff;
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-}
-.card {
-    background: #fff;
-    padding: 15px;
-    border-radius: 6px;
-}
-.logout {
-    float: right;
-    cursor: pointer;
-    color: #1976d2;
-}
-.flex {
-    display: flex;
-}
+.main{flex:1;padding:20px}
+.header{background:#fff;padding:15px;border-radius:6px;margin-bottom:15px}
+.card{background:#fff;padding:15px;border-radius:6px;margin-bottom:15px}
+.logout{float:right;color:#1976d2;cursor:pointer}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #ccc;padding:8px;text-align:center}
+th{background:#e3e8ec}
 </style>
 </head>
 
@@ -99,111 +40,115 @@ body {
 
 <!-- LOGIN -->
 <div id="login">
-    <div class="login-box">
-        <h2>E-Dziennik</h2>
-        <input id="loginName" placeholder="Login / imię">
-        <select id="loginRole">
-            <option value="">Wybierz rolę</option>
-            <option value="uczen">Uczeń</option>
-            <option value="nauczyciel">Nauczyciel</option>
-            <option value="dyrektor">Dyrektor</option>
-        </select>
-        <button id="loginBtn">Zaloguj</button>
-    </div>
+  <div class="login">
+    <h2>E-Dziennik</h2>
+    <input id="name" placeholder="Login / Imię">
+    <select id="role">
+      <option value="">Rola</option>
+      <option value="uczen">Uczeń</option>
+      <option value="nauczyciel">Nauczyciel</option>
+      <option value="dyrektor">Dyrektor</option>
+    </select>
+    <button id="loginBtn">Zaloguj</button>
+  </div>
 </div>
 
 <!-- APP -->
-<div id="app" class="flex">
+<div id="app" class="flex hidden">
 
-    <div class="sidebar">
-        <h3 id="roleLabel"></h3>
-        <a href="#">Dziennik</a>
-        <a href="#">Plan lekcji</a>
-        <a href="#">Oceny</a>
-        <a href="#">Wiadomości</a>
+  <div class="sidebar">
+    <h3 id="roleLabel"></h3>
+    <a onclick="show('oceny')">📘 Oceny</a>
+    <a onclick="show('frekwencja')">🕒 Frekwencja</a>
+    <a onclick="show('plan')">📅 Plan lekcji</a>
+    <a onclick="show('wiadomosci')">📨 Wiadomości</a>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      Witaj, <b id="userLabel"></b>
+      <span class="logout" onclick="logout()">Wyloguj</span>
     </div>
 
-    <div class="main">
-        <div class="header">
-            Witaj, <b id="userLabel"></b>
-            <span class="logout" id="logoutBtn">Wyloguj</span>
-        </div>
-
-        <div id="uczenPanel" class="card" style="display:none">
-            <h3>Oceny ucznia</h3>
-            Matematyka: 5<br>
-            Polski: 4<br>
-            Angielski: 5
-        </div>
-
-        <div id="nauczycielPanel" class="card" style="display:none">
-            <h3>Panel nauczyciela</h3>
-            Klasy: 1A, 2B
-        </div>
-
-        <div id="dyrektorPanel" class="card" style="display:none">
-            <h3>Panel dyrektora</h3>
-            Uczniowie: 420<br>
-            Nauczyciele: 38
-        </div>
+    <!-- OCENY -->
+    <div id="oceny" class="card hidden">
+      <h3>Oceny</h3>
+      <table>
+        <tr><th>Przedmiot</th><th>Oceny</th></tr>
+        <tr><td>Matematyka</td><td>5, 4, 5</td></tr>
+        <tr><td>Polski</td><td>4, 3</td></tr>
+        <tr><td>Angielski</td><td>5, 5</td></tr>
+      </table>
     </div>
 
+    <!-- FREKWENCJA -->
+    <div id="frekwencja" class="card hidden">
+      <h3>Frekwencja</h3>
+      <table>
+        <tr><th>Data</th><th>Status</th></tr>
+        <tr><td>01-09</td><td>Obecny</td></tr>
+        <tr><td>02-09</td><td>Nieobecny</td></tr>
+      </table>
+    </div>
+
+    <!-- PLAN -->
+    <div id="plan" class="card hidden">
+      <h3>Plan lekcji</h3>
+      <table>
+        <tr><th>Godzina</th><th>Przedmiot</th></tr>
+        <tr><td>8:00</td><td>Matematyka</td></tr>
+        <tr><td>9:00</td><td>Polski</td></tr>
+      </table>
+    </div>
+
+    <!-- WIADOMOŚCI -->
+    <div id="wiadomosci" class="card hidden">
+      <h3>Wiadomości</h3>
+      <p><b>Nauczyciel:</b> Sprawdzian w piątek.</p>
+    </div>
+
+  </div>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+const loginDiv = document.getElementById("login")
+const app = document.getElementById("app")
 
-    const loginDiv = document.getElementById("login");
-    const appDiv = document.getElementById("app");
+const nameI = document.getElementById("name")
+const roleI = document.getElementById("role")
 
-    const loginBtn = document.getElementById("loginBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
+const userLabel = document.getElementById("userLabel")
+const roleLabel = document.getElementById("roleLabel")
 
-    const loginName = document.getElementById("loginName");
-    const loginRole = document.getElementById("loginRole");
+const sections = ["oceny","frekwencja","plan","wiadomosci"]
 
-    const userLabel = document.getElementById("userLabel");
-    const roleLabel = document.getElementById("roleLabel");
+function show(id){
+  sections.forEach(s=>document.getElementById(s).classList.add("hidden"))
+  document.getElementById(id).classList.remove("hidden")
+}
 
-    const uczenPanel = document.getElementById("uczenPanel");
-    const nauczycielPanel = document.getElementById("nauczycielPanel");
-    const dyrektorPanel = document.getElementById("dyrektorPanel");
+document.getElementById("loginBtn").onclick=()=>{
+  if(!nameI.value||!roleI.value)return alert("Uzupełnij dane")
+  const user={name:nameI.value,role:roleI.value}
+  localStorage.setItem("user",JSON.stringify(user))
+  start(user)
+}
 
-    function showApp(user) {
-        loginDiv.style.display = "none";
-        appDiv.style.display = "flex";
+function start(u){
+  loginDiv.classList.add("hidden")
+  app.classList.remove("hidden")
+  userLabel.textContent=u.name
+  roleLabel.textContent=u.role.toUpperCase()
+  show("oceny")
+}
 
-        userLabel.textContent = user.name;
-        roleLabel.textContent = user.role.toUpperCase();
+function logout(){
+  localStorage.clear()
+  location.reload()
+}
 
-        uczenPanel.style.display = user.role === "uczen" ? "block" : "none";
-        nauczycielPanel.style.display = user.role === "nauczyciel" ? "block" : "none";
-        dyrektorPanel.style.display = user.role === "dyrektor" ? "block" : "none";
-    }
-
-    loginBtn.onclick = () => {
-        if (!loginName.value || !loginRole.value) {
-            alert("Uzupełnij dane");
-            return;
-        }
-
-        const user = {
-            name: loginName.value,
-            role: loginRole.value
-        };
-
-        localStorage.setItem("user", JSON.stringify(user));
-        showApp(user);
-    };
-
-    logoutBtn.onclick = () => {
-        localStorage.removeItem("user");
-        location.reload();
-    };
-
-    const saved = JSON.parse(localStorage.getItem("user"));
-    if (saved) showApp(saved);
-});
+const saved=JSON.parse(localStorage.getItem("user"))
+if(saved)start(saved)
 </script>
 
 </body>
